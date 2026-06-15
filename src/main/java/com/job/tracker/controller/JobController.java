@@ -1,0 +1,89 @@
+package com.job.tracker.controller;
+
+
+import com.job.tracker.dto.JobDTO;
+import com.job.tracker.service.JobService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
+
+@RestController
+@RequestMapping("/jobs")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
+public class JobController {
+
+    @Autowired
+    private JobService jobService;
+
+    @PostMapping
+    public ResponseEntity<JobDTO.JobResponse> createJob(
+            @RequestBody JobDTO.CreateJobRequest request,
+            HttpServletRequest httpRequest) {
+        Long userId = (Long) httpRequest.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(401).build();
+        }
+        JobDTO.JobResponse response = jobService.createJob(userId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<JobDTO.JobListResponse> getAllJobs(
+            @RequestParam(required = false) String status,
+            HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(401).build();
+        }
+        JobDTO.JobListResponse response = jobService.getAllJobs(userId, status);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<JobDTO.JobResponse> getJob(
+            @PathVariable Long id,
+            HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(401).build();
+        }
+        JobDTO.JobResponse response = jobService.getJob(id, userId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<JobDTO.JobResponse> updateJob(
+            @PathVariable Long id,
+            @RequestBody JobDTO.UpdateJobRequest request,
+            HttpServletRequest httpRequest) {
+        Long userId = (Long) httpRequest.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(401).build();
+        }
+        JobDTO.JobResponse response = jobService.updateJob(id, userId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteJob(
+            @PathVariable Long id,
+            HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(401).build();
+        }
+        jobService.deleteJob(id, userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/stats/count")
+    public ResponseEntity<Long> getJobCount(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(401).build();
+        }
+        long count = jobService.getJobCount(userId);
+        return ResponseEntity.ok(count);
+    }
+}
