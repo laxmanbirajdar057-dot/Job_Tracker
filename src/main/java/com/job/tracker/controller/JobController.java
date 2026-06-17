@@ -2,7 +2,11 @@ package com.job.tracker.controller;
 
 
 import com.job.tracker.dto.JobDTO;
+import com.job.tracker.entity.Job;
 import com.job.tracker.service.JobService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -86,4 +90,5 @@ public class JobController {
         long count = jobService.getJobCount(userId);
         return ResponseEntity.ok(count);
     }
+
 }
