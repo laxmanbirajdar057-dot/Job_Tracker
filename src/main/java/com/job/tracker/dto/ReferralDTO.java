@@ -12,12 +12,13 @@ public class ReferralDTO {
         private String referrerLinkedinUrl;
         private String relationship;
         private String notes;
+        private String status;
 
         public CreateReferralRequest() {
         }
 
         public CreateReferralRequest(String referrerName, String referrerEmail, String referrerPhone,
-                                      String company, String referrerLinkedinUrl, String relationship, String notes) {
+                String company, String referrerLinkedinUrl, String relationship, String notes) {
             this.referrerName = referrerName;
             this.referrerEmail = referrerEmail;
             this.referrerPhone = referrerPhone;
@@ -25,28 +26,72 @@ public class ReferralDTO {
             this.referrerLinkedinUrl = referrerLinkedinUrl;
             this.relationship = relationship;
             this.notes = notes;
+
         }
 
-        public String getReferrerName() { return referrerName; }
-        public void setReferrerName(String referrerName) { this.referrerName = referrerName; }
+        public String getReferrerName() {
+            return referrerName;
+        }
 
-        public String getReferrerEmail() { return referrerEmail; }
-        public void setReferrerEmail(String referrerEmail) { this.referrerEmail = referrerEmail; }
+        public void setReferrerName(String referrerName) {
+            this.referrerName = referrerName;
+        }
 
-        public String getReferrerPhone() { return referrerPhone; }
-        public void setReferrerPhone(String referrerPhone) { this.referrerPhone = referrerPhone; }
+        public String getReferrerEmail() {
+            return referrerEmail;
+        }
 
-        public String getCompany() { return company; }
-        public void setCompany(String company) { this.company = company; }
+        public void setReferrerEmail(String referrerEmail) {
+            this.referrerEmail = referrerEmail;
+        }
 
-        public String getReferrerLinkedinUrl() { return referrerLinkedinUrl; }
-        public void setReferrerLinkedinUrl(String referrerLinkedinUrl) { this.referrerLinkedinUrl = referrerLinkedinUrl; }
+        public String getReferrerPhone() {
+            return referrerPhone;
+        }
 
-        public String getRelationship() { return relationship; }
-        public void setRelationship(String relationship) { this.relationship = relationship; }
+        public void setReferrerPhone(String referrerPhone) {
+            this.referrerPhone = referrerPhone;
+        }
 
-        public String getNotes() { return notes; }
-        public void setNotes(String notes) { this.notes = notes; }
+        public String getCompany() {
+            return company;
+        }
+
+        public void setCompany(String company) {
+            this.company = company;
+        }
+
+        public String getReferrerLinkedinUrl() {
+            return referrerLinkedinUrl;
+        }
+
+        public void setReferrerLinkedinUrl(String referrerLinkedinUrl) {
+            this.referrerLinkedinUrl = referrerLinkedinUrl;
+        }
+
+        public String getRelationship() {
+            return relationship;
+        }
+
+        public void setRelationship(String relationship) {
+            this.relationship = relationship;
+        }
+
+        public String getNotes() {
+            return notes;
+        }
+
+        public void setNotes(String notes) {
+            this.notes = notes;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
     }
 
     public static class UpdateReferralRequest {
@@ -57,12 +102,13 @@ public class ReferralDTO {
         private String referrerLinkedinUrl;
         private String relationship;
         private String notes;
+        private String status;
 
         public UpdateReferralRequest() {
         }
 
         public UpdateReferralRequest(String referrerName, String referrerEmail, String referrerPhone,
-                                      String company, String referrerLinkedinUrl, String relationship, String notes) {
+                String company, String referrerLinkedinUrl, String relationship, String notes) {
             this.referrerName = referrerName;
             this.referrerEmail = referrerEmail;
             this.referrerPhone = referrerPhone;
@@ -72,26 +118,69 @@ public class ReferralDTO {
             this.notes = notes;
         }
 
-        public String getReferrerName() { return referrerName; }
-        public void setReferrerName(String referrerName) { this.referrerName = referrerName; }
+        public String getReferrerName() {
+            return referrerName;
+        }
 
-        public String getReferrerEmail() { return referrerEmail; }
-        public void setReferrerEmail(String referrerEmail) { this.referrerEmail = referrerEmail; }
+        public void setReferrerName(String referrerName) {
+            this.referrerName = referrerName;
+        }
 
-        public String getReferrerPhone() { return referrerPhone; }
-        public void setReferrerPhone(String referrerPhone) { this.referrerPhone = referrerPhone; }
+        public String getReferrerEmail() {
+            return referrerEmail;
+        }
 
-        public String getCompany() { return company; }
-        public void setCompany(String company) { this.company = company; }
+        public void setReferrerEmail(String referrerEmail) {
+            this.referrerEmail = referrerEmail;
+        }
 
-        public String getReferrerLinkedinUrl() { return referrerLinkedinUrl; }
-        public void setReferrerLinkedinUrl(String referrerLinkedinUrl) { this.referrerLinkedinUrl = referrerLinkedinUrl; }
+        public String getReferrerPhone() {
+            return referrerPhone;
+        }
 
-        public String getRelationship() { return relationship; }
-        public void setRelationship(String relationship) { this.relationship = relationship; }
+        public void setReferrerPhone(String referrerPhone) {
+            this.referrerPhone = referrerPhone;
+        }
 
-        public String getNotes() { return notes; }
-        public void setNotes(String notes) { this.notes = notes; }
+        public String getCompany() {
+            return company;
+        }
+
+        public void setCompany(String company) {
+            this.company = company;
+        }
+
+        public String getReferrerLinkedinUrl() {
+            return referrerLinkedinUrl;
+        }
+
+        public void setReferrerLinkedinUrl(String referrerLinkedinUrl) {
+            this.referrerLinkedinUrl = referrerLinkedinUrl;
+        }
+
+        public String getRelationship() {
+            return relationship;
+        }
+
+        public void setRelationship(String relationship) {
+            this.relationship = relationship;
+        }
+
+        public String getNotes() {
+            return notes;
+        }
+
+        public void setNotes(String notes) {
+            this.notes = notes;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
     }
 
     public static class ReferralResponse {
@@ -106,42 +195,106 @@ public class ReferralDTO {
         private long referredJobCount;
         private String createdAt;
         private String updatedAt;
+        private String status;
 
         public ReferralResponse() {
         }
 
-        public Long getId() { return id; }
-        public void setId(Long id) { this.id = id; }
+        public Long getId() {
+            return id;
+        }
 
-        public String getReferrerName() { return referrerName; }
-        public void setReferrerName(String referrerName) { this.referrerName = referrerName; }
+        public void setId(Long id) {
+            this.id = id;
+        }
 
-        public String getReferrerEmail() { return referrerEmail; }
-        public void setReferrerEmail(String referrerEmail) { this.referrerEmail = referrerEmail; }
+        public String getReferrerName() {
+            return referrerName;
+        }
 
-        public String getReferrerPhone() { return referrerPhone; }
-        public void setReferrerPhone(String referrerPhone) { this.referrerPhone = referrerPhone; }
+        public void setReferrerName(String referrerName) {
+            this.referrerName = referrerName;
+        }
 
-        public String getCompany() { return company; }
-        public void setCompany(String company) { this.company = company; }
+        public String getReferrerEmail() {
+            return referrerEmail;
+        }
 
-        public String getReferrerLinkedinUrl() { return referrerLinkedinUrl; }
-        public void setReferrerLinkedinUrl(String referrerLinkedinUrl) { this.referrerLinkedinUrl = referrerLinkedinUrl; }
+        public void setReferrerEmail(String referrerEmail) {
+            this.referrerEmail = referrerEmail;
+        }
 
-        public String getRelationship() { return relationship; }
-        public void setRelationship(String relationship) { this.relationship = relationship; }
+        public String getReferrerPhone() {
+            return referrerPhone;
+        }
 
-        public String getNotes() { return notes; }
-        public void setNotes(String notes) { this.notes = notes; }
+        public void setReferrerPhone(String referrerPhone) {
+            this.referrerPhone = referrerPhone;
+        }
 
-        public long getReferredJobCount() { return referredJobCount; }
-        public void setReferredJobCount(long referredJobCount) { this.referredJobCount = referredJobCount; }
+        public String getCompany() {
+            return company;
+        }
 
-        public String getCreatedAt() { return createdAt; }
-        public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+        public void setCompany(String company) {
+            this.company = company;
+        }
 
-        public String getUpdatedAt() { return updatedAt; }
-        public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
+        public String getReferrerLinkedinUrl() {
+            return referrerLinkedinUrl;
+        }
+
+        public void setReferrerLinkedinUrl(String referrerLinkedinUrl) {
+            this.referrerLinkedinUrl = referrerLinkedinUrl;
+        }
+
+        public String getRelationship() {
+            return relationship;
+        }
+
+        public void setRelationship(String relationship) {
+            this.relationship = relationship;
+        }
+
+        public String getNotes() {
+            return notes;
+        }
+
+        public void setNotes(String notes) {
+            this.notes = notes;
+        }
+
+        public long getReferredJobCount() {
+            return referredJobCount;
+        }
+
+        public void setReferredJobCount(long referredJobCount) {
+            this.referredJobCount = referredJobCount;
+        }
+
+        public String getCreatedAt() {
+            return createdAt;
+        }
+
+        public void setCreatedAt(String createdAt) {
+            this.createdAt = createdAt;
+        }
+
+        public String getUpdatedAt() {
+            return updatedAt;
+        }
+
+        public void setUpdatedAt(String updatedAt) {
+            this.updatedAt = updatedAt;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
     }
 
     public static class ReferralListResponse {
@@ -151,11 +304,21 @@ public class ReferralDTO {
         public ReferralListResponse() {
         }
 
-        public List<ReferralResponse> getData() { return data; }
-        public void setData(List<ReferralResponse> data) { this.data = data; }
+        public List<ReferralResponse> getData() {
+            return data;
+        }
 
-        public long getTotalCount() { return totalCount; }
-        public void setTotalCount(long totalCount) { this.totalCount = totalCount; }
+        public void setData(List<ReferralResponse> data) {
+            this.data = data;
+        }
+
+        public long getTotalCount() {
+            return totalCount;
+        }
+
+        public void setTotalCount(long totalCount) {
+            this.totalCount = totalCount;
+        }
     }
 
     public static class ReferralStats {
@@ -167,16 +330,36 @@ public class ReferralDTO {
         public ReferralStats() {
         }
 
-        public long getTotalReferrals() { return totalReferrals; }
-        public void setTotalReferrals(long totalReferrals) { this.totalReferrals = totalReferrals; }
+        public long getTotalReferrals() {
+            return totalReferrals;
+        }
 
-        public long getTotalApplications() { return totalApplications; }
-        public void setTotalApplications(long totalApplications) { this.totalApplications = totalApplications; }
+        public void setTotalReferrals(long totalReferrals) {
+            this.totalReferrals = totalReferrals;
+        }
 
-        public long getTotalApplicationsViaReferral() { return totalApplicationsViaReferral; }
-        public void setTotalApplicationsViaReferral(long totalApplicationsViaReferral) { this.totalApplicationsViaReferral = totalApplicationsViaReferral; }
+        public long getTotalApplications() {
+            return totalApplications;
+        }
 
-        public double getReferralRatePercent() { return referralRatePercent; }
-        public void setReferralRatePercent(double referralRatePercent) { this.referralRatePercent = referralRatePercent; }
+        public void setTotalApplications(long totalApplications) {
+            this.totalApplications = totalApplications;
+        }
+
+        public long getTotalApplicationsViaReferral() {
+            return totalApplicationsViaReferral;
+        }
+
+        public void setTotalApplicationsViaReferral(long totalApplicationsViaReferral) {
+            this.totalApplicationsViaReferral = totalApplicationsViaReferral;
+        }
+
+        public double getReferralRatePercent() {
+            return referralRatePercent;
+        }
+
+        public void setReferralRatePercent(double referralRatePercent) {
+            this.referralRatePercent = referralRatePercent;
+        }
     }
 }

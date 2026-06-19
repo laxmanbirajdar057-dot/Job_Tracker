@@ -39,6 +39,8 @@ public class ReferralService {
         if (request.getReferrerName() == null || request.getReferrerName().isBlank()) {
             throw new RuntimeException("referrerName is required");
         }
+        System.out.println("CREATE REFERRAL CALLED");
+        System.out.println(request.getReferrerName());
 
         Referral referral = new Referral();
         referral.setUser(user);
@@ -50,10 +52,16 @@ public class ReferralService {
         referral.setRelationship(parseRelationship(request.getRelationship()));
         referral.setNotes(request.getNotes());
 
+        referral.setStatus(
+                request.getStatus() != null ? request.getStatus() : "REQUESTED");
+
         referral = referralRepository.save(referral);
 
         return toReferralResponse(referral);
+
+        
     }
+    
 
     public ReferralListResponse getAllReferrals(Long userId) {
         List<Referral> referrals = referralRepository.findByUserIdOrderByCreatedAtDesc(userId);
@@ -78,13 +86,22 @@ public class ReferralService {
         Referral referral = referralRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new RuntimeException("Referral not found"));
 
-        if (request.getReferrerName() != null) referral.setReferrerName(request.getReferrerName());
-        if (request.getReferrerEmail() != null) referral.setReferrerEmail(request.getReferrerEmail());
-        if (request.getReferrerPhone() != null) referral.setReferrerPhone(request.getReferrerPhone());
-        if (request.getCompany() != null) referral.setCompany(request.getCompany());
-        if (request.getReferrerLinkedinUrl() != null) referral.setReferrerLinkedinUrl(request.getReferrerLinkedinUrl());
-        if (request.getRelationship() != null) referral.setRelationship(parseRelationship(request.getRelationship()));
-        if (request.getNotes() != null) referral.setNotes(request.getNotes());
+        if (request.getReferrerName() != null)
+            referral.setReferrerName(request.getReferrerName());
+        if (request.getReferrerEmail() != null)
+            referral.setReferrerEmail(request.getReferrerEmail());
+        if (request.getReferrerPhone() != null)
+            referral.setReferrerPhone(request.getReferrerPhone());
+        if (request.getCompany() != null)
+            referral.setCompany(request.getCompany());
+        if (request.getReferrerLinkedinUrl() != null)
+            referral.setReferrerLinkedinUrl(request.getReferrerLinkedinUrl());
+        if (request.getRelationship() != null)
+            referral.setRelationship(parseRelationship(request.getRelationship()));
+        if (request.getNotes() != null)
+            referral.setNotes(request.getNotes());
+        if (request.getStatus() != null)
+            referral.setStatus(request.getStatus());
 
         referral = referralRepository.save(referral);
 
@@ -123,7 +140,8 @@ public class ReferralService {
     // ================= HELPERS =================
 
     private Referral.RelationshipType parseRelationship(String relationship) {
-        if (relationship == null || relationship.isBlank()) return null;
+        if (relationship == null || relationship.isBlank())
+            return null;
         try {
             return Referral.RelationshipType.valueOf(relationship.trim().toUpperCase());
         } catch (IllegalArgumentException ex) {
@@ -141,9 +159,12 @@ public class ReferralService {
         response.setReferrerLinkedinUrl(referral.getReferrerLinkedinUrl());
         response.setRelationship(referral.getRelationship() != null ? referral.getRelationship().name() : null);
         response.setNotes(referral.getNotes());
+        response.setStatus(referral.getStatus());
         response.setReferredJobCount(jobRepository.countByReferralId(referral.getId()));
-        response.setCreatedAt(referral.getCreatedAt() != null ? referral.getCreatedAt().format(TIMESTAMP_FORMAT) : null);
-        response.setUpdatedAt(referral.getUpdatedAt() != null ? referral.getUpdatedAt().format(TIMESTAMP_FORMAT) : null);
+        response.setCreatedAt(
+                referral.getCreatedAt() != null ? referral.getCreatedAt().format(TIMESTAMP_FORMAT) : null);
+        response.setUpdatedAt(
+                referral.getUpdatedAt() != null ? referral.getUpdatedAt().format(TIMESTAMP_FORMAT) : null);
         return response;
     }
 }

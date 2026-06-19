@@ -16,8 +16,8 @@ public class Job {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "referral_id")
+    @OneToOne(mappedBy="job", fetch=FetchType.LAZY)
+    // @JoinColumn(name = "referral_id")
     private Referral referral;
 
     @Column(nullable = false)

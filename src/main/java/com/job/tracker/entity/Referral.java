@@ -1,7 +1,10 @@
 package com.job.tracker.entity;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
+
+import com.job.tracker.dto.ReferralDTO;
 
 @Entity
 @Table(name = "referrals")
@@ -15,6 +18,10 @@ public class Referral {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @OneToOne
+    @JoinColumn(name = "job_id")
+    private Job job;
+
     @Column(nullable = false)
     private String referrerName;
 
@@ -25,6 +32,8 @@ public class Referral {
     private String company;
 
     private String referrerLinkedinUrl;
+
+    private String status;
 
     @Enumerated(EnumType.STRING)
     private RelationshipType relationship;
@@ -42,8 +51,8 @@ public class Referral {
     }
 
     public Referral(Long id, User user, String referrerName, String referrerEmail, String referrerPhone,
-                     String company, String referrerLinkedinUrl, RelationshipType relationship, String notes,
-                     LocalDateTime createdAt, LocalDateTime updatedAt) {
+            String company, String referrerLinkedinUrl, RelationshipType relationship, String notes,
+            LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.user = user;
         this.referrerName = referrerName;
@@ -160,5 +169,29 @@ public class Referral {
 
     public enum RelationshipType {
         COLLEGE_ALUMNI, FORMER_COLLEAGUE, CURRENT_COLLEAGUE, FRIEND, FAMILY, LINKEDIN_CONNECTION, RECRUITER, OTHER
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getReferrerContact() {
+        return this.referrerEmail; // or referrerPhone if preferred
+    }
+
+    public String getReferrerRelation() {
+        return relationship != null ? relationship.name() : null;
+    }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
     }
 }

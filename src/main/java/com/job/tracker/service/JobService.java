@@ -5,8 +5,11 @@ import com.job.tracker.dto.JobDTO.JobListResponse;
 import com.job.tracker.dto.JobDTO.JobResponse;
 import com.job.tracker.dto.JobDTO.UpdateJobRequest;
 import com.job.tracker.entity.Job;
+import com.job.tracker.entity.Job.JobType;
+import com.job.tracker.entity.Referral;
 import com.job.tracker.entity.User;
 import com.job.tracker.repository.JobRepository;
+import com.job.tracker.repository.ReferralRepository;
 import com.job.tracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,9 @@ public class JobService {
 
     @Autowired
     private JobRepository jobRepository;
+
+    @Autowired
+    private ReferralRepository referralRepository;
 
     private static final DateTimeFormatter TIMESTAMP_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
@@ -45,7 +51,19 @@ public class JobService {
         job.setStatus(parseStatus(request.getStatus()));
         job.setNotes(request.getNotes());
 
+        Referral referral = null;
+
+        if (request.getReferralId() != null) {
+            referral = resolveReferral(request.getReferralId(), userId);
+            job.setReferral(referral);
+        }
+
         job = jobRepository.save(job);
+
+        if (referral != null) {
+            referral.setJob(job);
+            referralRepository.save(referral);
+        }
 
         return toJobResponse(job);
     }
@@ -73,17 +91,47 @@ public class JobService {
         Job job = jobRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
-        if (request.getCompany() != null) job.setCompany(request.getCompany());
-        if (request.getRoleName() != null) job.setRoleName(request.getRoleName());
-        if (request.getJobUrl() != null) job.setJobUrl(request.getJobUrl());
-        if (request.getJobDescription() != null) job.setJobDescription(request.getJobDescription());
-        if (request.getJobType() != null) job.setJobType(parseJobType(request.getJobType()));
-        if (request.getLocation() != null) job.setLocation(request.getLocation());
-        if (request.getSalary() != null) job.setSalary(request.getSalary());
-        if (request.getCompanySize() != null) job.setCompanySize(request.getCompanySize());
-        if (request.getDeadline() != null) job.setDeadline(request.getDeadline());
-        if (request.getStatus() != null) job.setStatus(parseStatus(request.getStatus()));
-        if (request.getNotes() != null) job.setNotes(request.getNotes());
+        if (request.getCompany() != null)
+            job.setCompany(request.getCompany());
+        if (request.getRoleName() != null)
+            job.setRoleName(request.getRoleName());
+        if (request.getJobUrl() != null)
+            job.setJobUrl(request.getJobUrl());
+        if (request.getJobDescription() != null)
+            job.setJobDescription(request.getJobDescription());
+        if (request.getJobType() != null)
+            job.setJobType(parseJobType(request.getJobType()));
+        if (request.getLocation() != null)
+            job.setLocation(request.getLocation());
+        if (request.getSalary() != null)
+            job.setSalary(request.getSalary());
+        if (request.getCompanySize() != null)
+            job.setCompanySize(request.getCompanySize());
+        if (request.getDeadline() != null)
+            job.setDeadline(request.getDeadline());
+        if (request.getStatus() != null)
+            job.setStatus(parseStatus(request.getStatus()));
+        if (request.getNotes() != null)
+            job.setNotes(request.getNotes());
+
+        if (request.isReferralIdSet()) {
+            // referralId was explicitly present in the request body: null means
+            // "unlink the referral", a value means "link to this referral".
+
+            Referral referral = null;
+
+            if (request.getReferralId() != null) {
+                referral = resolveReferral(request.getReferralId(), userId);
+                job.setReferral(referral);
+            }
+
+            job = jobRepository.save(job);
+
+            if (referral != null) {
+                referral.setJob(job);
+                referralRepository.save(referral);
+            }
+        }
 
         job = jobRepository.save(job);
 
@@ -109,7 +157,8 @@ public class JobService {
     // ================= HELPERS =================
 
     private Job.JobType parseJobType(String jobType) {
-        if (jobType == null || jobType.isBlank()) return null;
+        if (jobType == null || jobType.isBlank())
+            return null;
         try {
             return Job.JobType.valueOf(jobType.trim().toUpperCase());
         } catch (IllegalArgumentException ex) {
@@ -118,12 +167,18 @@ public class JobService {
     }
 
     private Job.ApplicationStatus parseStatus(String status) {
-        if (status == null || status.isBlank()) return Job.ApplicationStatus.SAVED;
+        if (status == null || status.isBlank())
+            return Job.ApplicationStatus.SAVED;
         try {
             return Job.ApplicationStatus.valueOf(status.trim().toUpperCase());
         } catch (IllegalArgumentException ex) {
             throw new RuntimeException("Invalid status: " + status);
         }
+    }
+
+    private Referral resolveReferral(Long referralId, Long userId) {
+        return referralRepository.findByIdAndUserId(referralId, userId)
+                .orElseThrow(() -> new RuntimeException("Referral not found"));
     }
 
     private JobResponse toJobResponse(Job job) {
@@ -143,6 +198,32 @@ public class JobService {
         response.setNotes(job.getNotes());
         response.setCreatedAt(job.getCreatedAt() != null ? job.getCreatedAt().format(TIMESTAMP_FORMAT) : null);
         response.setUpdatedAt(job.getUpdatedAt() != null ? job.getUpdatedAt().format(TIMESTAMP_FORMAT) : null);
+
+        if (job.getReferral() != null) {
+
+            response.setReferralId(job.getReferral().getId());
+
+            response.setHasReferral(true);
+
+            response.setReferralStatus(
+                    job.getReferral().getStatus());
+
+            response.setReferrerName(
+                    job.getReferral().getReferrerName());
+
+            response.setReferrerContact(
+                    job.getReferral().getReferrerContact());
+
+            response.setReferrerRelation(
+                    job.getReferral().getReferrerRelation());
+
+            response.setReferralNotes(
+                    job.getReferral().getNotes());
+            
+            response.setReferralId(job.getReferral().getId());
+
+        }
+
         return response;
     }
 }
