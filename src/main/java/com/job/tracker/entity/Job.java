@@ -16,6 +16,10 @@ public class Job {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "referral_id")
+    private Referral referral;
+
     @Column(nullable = false)
     private String company;
 
@@ -105,6 +109,14 @@ public class Job {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Referral getReferral() {
+        return referral;
+    }
+
+    public void setReferral(Referral referral) {
+        this.referral = referral;
     }
 
     public String getCompany() {

@@ -1,4 +1,7 @@
 // Dashboard page: loads jobs + stats, and handles the add/edit/delete modal.
+// Now referral-aware: every job can carry referral-request details
+// (referrer, contact, relation, referral status, notes) independent of
+// the application status.
 
 const STATUS_VALUES = [
   "SAVED",
@@ -12,6 +15,8 @@ const STATUS_VALUES = [
 ];
 
 const JOB_TYPE_VALUES = ["FULL_TIME", "PART_TIME", "CONTRACT", "INTERNSHIP", "TEMPORARY"];
+
+const REFERRAL_STATUS_VALUES = ["NOT_REQUESTED", "REQUESTED", "REFERRED", "NO_RESPONSE", "DECLINED"];
 
 let allJobs = [];
 let editingJobId = null;
@@ -33,8 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("logoutBtn").addEventListener("click", () => Auth.logout());
   document.getElementById("addJobBtn").addEventListener("click", () => openModal());
   document.getElementById("statusFilter").addEventListener("change", applyFilter);
+  document.getElementById("referralFilter").addEventListener("change", applyFilter);
   document.getElementById("jobForm").addEventListener("submit", handleSaveJob);
   document.getElementById("cancelBtn").addEventListener("click", closeModal);
+  document.getElementById("hasReferral").addEventListener("change", toggleReferralFields);
   document.getElementById("modalOverlay").addEventListener("click", (e) => {
     if (e.target.id === "modalOverlay") closeModal();
   });
@@ -73,15 +80,26 @@ function renderStatusBreakdown(jobs) {
   const applied = jobs.filter((j) => j.status !== "SAVED").length;
   const offers = jobs.filter((j) => j.status === "OFFER" || j.status === "NEGOTIATING").length;
   const rejected = jobs.filter((j) => j.status === "REJECTED").length;
+  const referrals = jobs.filter((j) => j.referralStatus === "REFERRED").length;
 
   document.getElementById("appliedCount").textContent = applied;
   document.getElementById("offerCount").textContent = offers;
   document.getElementById("rejectedCount").textContent = rejected;
+  document.getElementById("referralCount").textContent = referrals;
 }
 
 function applyFilter() {
   const status = document.getElementById("statusFilter").value;
-  const filtered = status ? allJobs.filter((j) => j.status === status) : allJobs;
+  const referral = document.getElementById("referralFilter").value;
+
+  let filtered = status ? allJobs.filter((j) => j.status === status) : allJobs;
+
+  if (referral === "WITH") {
+    filtered = filtered.filter((j) => j.hasReferral);
+  } else if (referral) {
+    filtered = filtered.filter((j) => (j.referralStatus || "NOT_REQUESTED") === referral);
+  }
+
   renderJobs(filtered);
 }
 
@@ -92,7 +110,7 @@ function renderJobs(jobs) {
     container.innerHTML = `
       <div class="empty-state">
         <h3>No applications here yet</h3>
-        <p>Click "Add Job" to start tracking one.</p>
+        <p>Click "Add Job" to start tracking one — and don't forget to log any referral you line up.</p>
       </div>`;
     return;
   }
@@ -101,6 +119,14 @@ function renderJobs(jobs) {
     .map((job) => {
       const statusLabel = formatLabel(job.status);
       const typeLabel = job.jobType ? formatLabel(job.jobType) : null;
+      const referralStatus = job.referralStatus || "NOT_REQUESTED";
+      const referralLabel = formatLabel(referralStatus);
+
+      const referralChip = job.hasReferral
+        ? `<span class="referral-chip referral-${referralStatus}" title="${job.referrerName ? escapeHtml(job.referrerName) : "Referral"}">
+             🤝 ${referralLabel}${job.referrerName ? ` · ${escapeHtml(job.referrerName)}` : ""}
+           </span>`
+        : `<span class="referral-chip referral-NOT_REQUESTED">No referral yet</span>`;
 
       return `
         <div class="job-card" data-id="${job.id}">
@@ -113,6 +139,7 @@ function renderJobs(jobs) {
               ${job.salary ? `<span>${escapeHtml(job.salary)}</span>` : ""}
               ${job.deadline ? `<span>Deadline: ${job.deadline}</span>` : ""}
             </div>
+            <div class="referral-row">${referralChip}</div>
           </div>
           <div class="job-actions">
             <span class="status-badge status-${job.status}">${statusLabel}</span>
@@ -148,11 +175,21 @@ function openModal(jobId = null) {
       document.getElementById("status").value = job.status || "SAVED";
       document.getElementById("jobDescription").value = job.jobDescription || "";
       document.getElementById("notes").value = job.notes || "";
+
+      document.getElementById("hasReferral").checked = !!job.hasReferral;
+      document.getElementById("referrerName").value = job.referrerName || "";
+      document.getElementById("referrerRelation").value = job.referrerRelation || "";
+      document.getElementById("referrerContact").value = job.referrerContact || "";
+      document.getElementById("referralRequestedDate").value = job.referralRequestedDate || "";
+      document.getElementById("referralStatus").value = job.referralStatus || "NOT_REQUESTED";
+      document.getElementById("referralNotes").value = job.referralNotes || "";
     }
   } else {
     document.getElementById("status").value = "SAVED";
+    document.getElementById("referralStatus").value = "NOT_REQUESTED";
   }
 
+  toggleReferralFields();
   document.getElementById("modalOverlay").classList.add("visible");
 }
 
@@ -161,9 +198,15 @@ function closeModal() {
   editingJobId = null;
 }
 
+function toggleReferralFields() {
+  const checked = document.getElementById("hasReferral").checked;
+  document.getElementById("referralFields").classList.toggle("visible", checked);
+}
+
 function populateSelectOptions() {
   const typeSelect = document.getElementById("jobType");
   const statusSelect = document.getElementById("status");
+  const referralStatusSelect = document.getElementById("referralStatus");
 
   typeSelect.innerHTML =
     `<option value="">Select type</option>` +
@@ -172,11 +215,17 @@ function populateSelectOptions() {
   statusSelect.innerHTML = STATUS_VALUES.map(
     (v) => `<option value="${v}">${formatLabel(v)}</option>`
   ).join("");
+
+  referralStatusSelect.innerHTML = REFERRAL_STATUS_VALUES.map(
+    (v) => `<option value="${v}">${formatLabel(v)}</option>`
+  ).join("");
 }
 
 async function handleSaveJob(event) {
   event.preventDefault();
   const saveBtn = document.getElementById("saveBtn");
+
+  const hasReferral = document.getElementById("hasReferral").checked;
 
   const payload = {
     company: document.getElementById("company").value.trim(),
@@ -190,6 +239,14 @@ async function handleSaveJob(event) {
     status: document.getElementById("status").value || "SAVED",
     jobDescription: document.getElementById("jobDescription").value.trim() || null,
     notes: document.getElementById("notes").value.trim() || null,
+
+    hasReferral: hasReferral,
+    referrerName: hasReferral ? document.getElementById("referrerName").value.trim() || null : null,
+    referrerRelation: hasReferral ? document.getElementById("referrerRelation").value.trim() || null : null,
+    referrerContact: hasReferral ? document.getElementById("referrerContact").value.trim() || null : null,
+    referralRequestedDate: hasReferral ? document.getElementById("referralRequestedDate").value || null : null,
+    referralStatus: hasReferral ? document.getElementById("referralStatus").value || "REQUESTED" : "NOT_REQUESTED",
+    referralNotes: hasReferral ? document.getElementById("referralNotes").value.trim() || null : null,
   };
 
   if (!payload.company || !payload.roleName) {
@@ -238,6 +295,7 @@ async function handleDeleteJob(jobId) {
 }
 
 function formatLabel(value) {
+  if (!value) return "";
   return value
     .toLowerCase()
     .split("_")

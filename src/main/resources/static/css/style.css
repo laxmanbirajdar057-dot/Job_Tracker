@@ -238,6 +238,25 @@ textarea {
   height: 9px;
   border-radius: 50%;
   background: var(--accent);
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand-name {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.brand-tagline {
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.2px;
 }
 
 .topbar .user-info {
@@ -485,4 +504,98 @@ textarea {
     flex-direction: column;
     gap: 0;
   }
+}
+
+/* ===================== REFERRAL FEATURES ===================== */
+
+:root {
+  --referral: #c08bf0;
+  --referral-bg: rgba(192, 139, 240, 0.14);
+}
+
+.stat-card-referral {
+  border-color: rgba(192, 139, 240, 0.35);
+}
+
+.stat-card-referral .stat-value {
+  color: var(--referral);
+}
+
+.referral-row {
+  margin-top: 8px;
+}
+
+.referral-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--surface-2);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+
+.referral-NOT_REQUESTED { background: rgba(154, 161, 173, 0.12); color: var(--text-dim); border-color: transparent; }
+.referral-REQUESTED { background: rgba(217, 164, 65, 0.14); color: var(--warn); border-color: transparent; }
+.referral-REFERRED { background: var(--referral-bg); color: var(--referral); border-color: transparent; }
+.referral-NO_RESPONSE { background: rgba(154, 161, 173, 0.12); color: var(--text-dim); border-color: transparent; }
+.referral-DECLINED { background: var(--danger-bg); color: var(--danger); border-color: transparent; }
+
+/* Referral block inside the Add/Edit Job modal */
+
+.referral-section {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--border);
+}
+
+.referral-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.referral-section-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--referral);
+}
+
+.referral-icon {
+  font-size: 16px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 14px;
+  cursor: pointer;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--referral);
+  cursor: pointer;
+}
+
+.referral-fields {
+  display: none;
+  flex-direction: column;
+  gap: 0;
+  padding: 14px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+.referral-fields.visible {
+  display: flex;
 }

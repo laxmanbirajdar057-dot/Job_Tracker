@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - Job Tracker</title>
+  <title>Dashboard - ReferTrack | Smart Job Tracker & Referral Manager</title>
   <link rel="stylesheet" href="/api/css/style.css" />
 </head>
 <body>
@@ -12,7 +12,10 @@
     <header class="topbar">
       <div class="brand">
         <span class="dot"></span>
-        <span>Job Tracker</span>
+        <div class="brand-text">
+          <span class="brand-name">ReferTrack</span>
+          <span class="brand-tagline">Smart Job Tracker &amp; Referral Manager</span>
+        </div>
       </div>
       <div class="user-info">
         <span id="userName">—</span>
@@ -35,6 +38,10 @@
           <div class="stat-value" id="offerCount">0</div>
           <div class="stat-label">Offers</div>
         </div>
+        <div class="stat-card stat-card-referral">
+          <div class="stat-value" id="referralCount">0</div>
+          <div class="stat-label">Referrals Secured</div>
+        </div>
         <div class="stat-card">
           <div class="stat-value" id="rejectedCount">0</div>
           <div class="stat-label">Rejected</div>
@@ -44,6 +51,15 @@
       <div class="toolbar">
         <h2>Your Applications</h2>
         <div class="filter-row">
+          <select id="referralFilter">
+            <option value="">All referrals</option>
+            <option value="WITH">Has referral</option>
+            <option value="NOT_REQUESTED">Not requested</option>
+            <option value="REQUESTED">Requested</option>
+            <option value="REFERRED">Referred</option>
+            <option value="NO_RESPONSE">No response</option>
+            <option value="DECLINED">Declined</option>
+          </select>
           <select id="statusFilter">
             <option value="">All statuses</option>
             <option value="SAVED">Saved</option>
@@ -114,7 +130,7 @@
             <select id="jobType"></select>
           </div>
           <div class="field">
-            <label for="status">Status</label>
+            <label for="status">Application status</label>
             <select id="status"></select>
           </div>
         </div>
@@ -126,7 +142,54 @@
 
         <div class="field">
           <label for="notes">Notes</label>
-          <textarea id="notes" placeholder="Referral contact, interview notes, follow-ups..."></textarea>
+          <textarea id="notes" placeholder="Interview notes, follow-ups..."></textarea>
+        </div>
+
+        <!-- ===================== REFERRAL SECTION ===================== -->
+        <div class="referral-section">
+          <div class="referral-section-header">
+            <span class="referral-icon">🤝</span>
+            <h3>Referral details</h3>
+          </div>
+
+          <label class="checkbox-row">
+            <input type="checkbox" id="hasReferral" />
+            <span>I have (or am pursuing) a referral for this role</span>
+          </label>
+
+          <div id="referralFields" class="referral-fields">
+            <div class="field-row">
+              <div class="field">
+                <label for="referrerName">Referrer name</label>
+                <input type="text" id="referrerName" placeholder="e.g. Priya Sharma" />
+              </div>
+              <div class="field">
+                <label for="referrerRelation">Relation</label>
+                <input type="text" id="referrerRelation" placeholder="e.g. Ex-colleague, LinkedIn contact" />
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="referrerContact">Referrer contact</label>
+                <input type="text" id="referrerContact" placeholder="email / LinkedIn / phone" />
+              </div>
+              <div class="field">
+                <label for="referralRequestedDate">Requested on</label>
+                <input type="date" id="referralRequestedDate" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="referralStatus">Referral status</label>
+              <select id="referralStatus"></select>
+            </div>
+
+            <div class="field">
+              <label for="referralNotes">Referral notes</label>
+              <textarea id="referralNotes" placeholder="What did they say? Did you send your resume? Any follow-up needed?"></textarea>
+            </div>
+          </div>
         </div>
 
         <div class="modal-actions">
