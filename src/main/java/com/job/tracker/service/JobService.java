@@ -50,6 +50,11 @@ public class JobService {
         job.setDeadline(request.getDeadline());
         job.setStatus(parseStatus(request.getStatus()));
         job.setNotes(request.getNotes());
+        job.setHasReferral(request.getHasReferral() != null && request.getHasReferral());
+        job.setReferrerName(request.getReferrerName());
+        job.setReferrerContact(request.getReferrerContact());
+        job.setReferrerRelation(request.getReferrerRelation());
+        job.setReferralStatus(request.getReferralStatus());
 
         Referral referral = null;
 
@@ -113,6 +118,16 @@ public class JobService {
             job.setStatus(parseStatus(request.getStatus()));
         if (request.getNotes() != null)
             job.setNotes(request.getNotes());
+        if (request.getHasReferral() != null)
+            job.setHasReferral(request.getHasReferral());
+        if (request.getReferrerName() != null)
+            job.setReferrerName(request.getReferrerName());
+        if (request.getReferrerContact() != null)
+            job.setReferrerContact(request.getReferrerContact());
+        if (request.getReferrerRelation() != null)
+            job.setReferrerRelation(request.getReferrerRelation());
+        if (request.getReferralStatus() != null)
+            job.setReferralStatus(request.getReferralStatus());
 
         if (request.isReferralIdSet()) {
             // referralId was explicitly present in the request body: null means
@@ -200,28 +215,22 @@ public class JobService {
         response.setUpdatedAt(job.getUpdatedAt() != null ? job.getUpdatedAt().format(TIMESTAMP_FORMAT) : null);
 
         if (job.getReferral() != null) {
-
-            response.setReferralId(job.getReferral().getId());
-
+            // Job is linked to a Referral entity (from the Referral Network tab)
             response.setHasReferral(true);
-
-            response.setReferralStatus(
-                    job.getReferral().getStatus());
-
-            response.setReferrerName(
-                    job.getReferral().getReferrerName());
-
-            response.setReferrerContact(
-                    job.getReferral().getReferrerContact());
-
-            response.setReferrerRelation(
-                    job.getReferral().getReferrerRelation());
-
-            response.setReferralNotes(
-                    job.getReferral().getNotes());
-            
             response.setReferralId(job.getReferral().getId());
-
+            response.setReferralStatus(job.getReferral().getStatus());
+            response.setReferrerName(job.getReferral().getReferrerName());
+            response.setReferrerContact(job.getReferral().getReferrerContact());
+            response.setReferrerRelation(job.getReferral().getReferrerRelation());
+            response.setReferralNotes(job.getReferral().getNotes());
+        } else {
+            // Inline referral fields filled directly on the job form (no Referral entity
+            // linked)
+            response.setHasReferral(job.isHasReferral());
+            response.setReferrerName(job.getReferrerName());
+            response.setReferrerContact(job.getReferrerContact());
+            response.setReferrerRelation(job.getReferrerRelation());
+            response.setReferralStatus(job.getReferralStatus()); // needs field on Job entity — see note below
         }
 
         return response;

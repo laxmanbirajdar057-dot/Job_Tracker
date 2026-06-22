@@ -183,6 +183,9 @@ function openModal(jobId = null) {
       document.getElementById("referralRequestedDate").value = job.referralRequestedDate || "";
       document.getElementById("referralStatus").value = job.referralStatus || "NOT_REQUESTED";
       document.getElementById("referralNotes").value = job.referralNotes || "";
+
+      populateJobReferralSelect(job.referralId || "");
+
     }
   } else {
     document.getElementById("status").value = "SAVED";
@@ -239,6 +242,7 @@ async function handleSaveJob(event) {
     status: document.getElementById("status").value || "SAVED",
     jobDescription: document.getElementById("jobDescription").value.trim() || null,
     notes: document.getElementById("notes").value.trim() || null,
+    referralId: document.getElementById("referralId").value || null,
 
     hasReferral: hasReferral,
     referrerName: hasReferral ? document.getElementById("referrerName").value.trim() || null : null,

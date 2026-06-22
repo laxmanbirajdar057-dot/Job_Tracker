@@ -76,8 +76,10 @@ public class Job {
     private String referrerName;
 
     private String referrerContact;
-    
+
     private String referrerRelation;
+
+    private String referralStatus;
 
     public Job() {
     }
@@ -292,5 +294,13 @@ public class Job {
 
     public void setReferrerRelation(String referrerRelation) {
         this.referrerRelation = referrerRelation;
+    }
+
+    public String getReferralStatus() {
+        return referralStatus;
+    }
+
+    public void setReferralStatus(String referralStatus) {
+        this.referralStatus = referralStatus;
     }
 }

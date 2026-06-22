@@ -25,6 +25,8 @@ public class JobDTO {
         private String referralStatus;
         private LocalDate referralRequestedDate;
         private String referralNotes;
+        private Long referralId;
+
 
         public CreateJobRequest() {
         }
@@ -199,8 +201,11 @@ public class JobDTO {
         }
 
         public Long getReferralId() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getReferralId'");
+            return referralId;
+        }
+
+        public void setReferralId(Long referralId) {
+            this.referralId = referralId;
         }
     }
 
