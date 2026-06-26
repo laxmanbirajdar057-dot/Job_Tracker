@@ -44,9 +44,8 @@
           <i class="ti ti-users"></i><span>Referrals</span>
         </div>
         <div class="sidebar-label">Tools</div>
-        <div class="sidebar-item disabled">
+        <div class="sidebar-item" data-tab="analytics">
           <i class="ti ti-chart-bar"></i><span>Analytics</span>
-          <span class="coming-soon">Soon</span>
         </div>
         <div class="sidebar-item disabled">
           <i class="ti ti-bell"></i><span>Reminders</span>
@@ -124,7 +123,10 @@
               <div id="jobList" class="job-grid"></div>
             </div>
 
+
             <!-- REFERRAL NETWORK TAB -->
+
+
             <div id="tab-network" class="tab-panel">
               <div class="section-header">
                 <div class="section-title">Referral Network</div>
@@ -155,8 +157,48 @@
                 </button>
               </div>
             </div>
-          </div>
 
+            <!-- ✅ ANALYTICS TAB — outside network tab, after its closing div -->
+             
+            <div id="tab-analytics" class="tab-panel">
+              <div class="section-header">
+                <div class="section-title">Analytics</div>
+              </div>
+              <div class="stats-row" style="flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                <div class="stat-card">
+                  <div class="stat-value" id="ana-total">0</div>
+                  <div class="stat-label">Total Applications</div>
+                </div>
+                <div class="stat-card stat-card-blue">
+                  <div class="stat-value" id="ana-applied">0</div>
+                  <div class="stat-label">Applied / In Progress</div>
+                </div>
+                <div class="stat-card stat-card-green">
+                  <div class="stat-value" id="ana-offer">0</div>
+                  <div class="stat-label">Offers</div>
+                </div>
+                <div class="stat-card stat-card-red">
+                  <div class="stat-value" id="ana-rejected">0</div>
+                  <div class="stat-label">Rejected</div>
+                </div>
+                <div class="stat-card stat-card-referral">
+                  <div class="stat-value" id="ana-referral">0</div>
+                  <div class="stat-label">Via Referral</div>
+                </div>
+              </div>
+              <div class="side-card" style="margin-bottom:16px;">
+                <div class="side-card-title">📊 Status Breakdown</div>
+                <div id="ana-breakdown" style="padding:8px 0;"></div>
+              </div>
+              <div class="side-card">
+                <div class="side-card-title">🤝 Referral Success Rate</div>
+                <div id="ana-referral-rate" style="padding:12px 0;font-size:28px;font-weight:700;color:var(--accent);">
+                </div>
+                <div style="font-size:12px;color:var(--text-dim);">of all applications had a referral</div>
+              </div>
+            </div>
+
+          </div> <!-- closing content-left -->
           <!-- RIGHT SIDEBAR -->
           <div class="content-right">
             <div class="side-card">

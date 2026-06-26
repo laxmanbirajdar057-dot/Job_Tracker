@@ -188,6 +188,51 @@ const cvBadge = cvDisplay && job.resumeId
   }).join("");
 }
 
+function renderAnalytics() {
+  if (!allJobs || allJobs.length === 0) {
+    document.getElementById("ana-breakdown").innerHTML =
+      `<div style="color:var(--text-dim);font-size:13px;">No applications yet.</div>`;
+    return;
+  }
+
+  const total    = allJobs.length;
+  const applied  = allJobs.filter(j => j.status !== "SAVED").length;
+  const offers   = allJobs.filter(j => j.status === "OFFER" || j.status === "NEGOTIATING").length;
+  const rejected = allJobs.filter(j => j.status === "REJECTED").length;
+  const referral = allJobs.filter(j => j.hasReferral).length;
+
+  document.getElementById("ana-total").textContent    = total;
+  document.getElementById("ana-applied").textContent  = applied;
+  document.getElementById("ana-offer").textContent    = offers;
+  document.getElementById("ana-rejected").textContent = rejected;
+  document.getElementById("ana-referral").textContent = referral;
+
+  const rate = total === 0 ? 0 : Math.round((referral / total) * 100);
+  document.getElementById("ana-referral-rate").textContent = `${rate}%`;
+
+  // Status breakdown bars
+  const statusGroups = {};
+  allJobs.forEach(j => {
+    statusGroups[j.status] = (statusGroups[j.status] || 0) + 1;
+  });
+
+  document.getElementById("ana-breakdown").innerHTML = Object.entries(statusGroups)
+    .sort((a, b) => b[1] - a[1])
+    .map(([status, count]) => {
+      const pct = Math.round((count / total) * 100);
+      return `
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;">
+            <span>${formatLabel(status)}</span>
+            <span>${count} (${pct}%)</span>
+          </div>
+          <div style="background:var(--border);border-radius:4px;height:6px;">
+            <div style="width:${pct}%;background:var(--accent);border-radius:4px;height:6px;transition:width 0.3s;"></div>
+          </div>
+        </div>`;
+    }).join("");
+}
+
 // ===================== MODAL =====================
 
 function openModal(jobId = null) {

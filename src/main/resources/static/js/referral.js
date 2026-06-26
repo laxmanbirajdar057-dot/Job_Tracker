@@ -58,6 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
 function switchTab(tab) {
   document.getElementById("tab-applications").classList.toggle("active", tab === "applications");
   document.getElementById("tab-network").classList.toggle("active", tab === "network");
+  document.getElementById("tab-analytics").classList.toggle("active", tab === "analytics");
+  if (tab === "analytics") renderAnalytics();
 }
 
 // ===================== LOAD REFERRALS =====================
@@ -301,11 +303,28 @@ async function loadSidebarResumes() {
           <div class="resume-file-meta">${r.cvFileName ? escapeHtml(r.cvFileName) : ""}${r.version ? ` · ${escapeHtml(r.version)}` : ""}</div>
         </div>
         <div class="resume-file-actions">
-<button class="btn btn-secondary btn-sm" onclick="viewResume(${r.id})" title="View">⬇</button>
+          <button class="btn btn-secondary btn-sm" onclick="viewResume(${r.id})" title="View">⬇</button>
+          <button class="btn btn-danger btn-sm" onclick="handleDeleteResume(${r.id})" title="Delete">🗑</button>
         </div>
       </div>`).join("");
   } catch (err) {
     console.error("Failed to load sidebar resumes", err);
+  }
+}
+
+async function handleDeleteResume(resumeId) {
+  if (!confirm("Delete this resume? This cannot be undone.")) return;
+  try {
+    const token = Auth.getToken();
+    const res = await fetch(`/api/resumes/${resumeId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error("Delete failed");
+    showToast("Resume deleted.");
+    loadSidebarResumes();
+  } catch (err) {
+    showToast("Could not delete resume.", "error");
   }
 }
 
