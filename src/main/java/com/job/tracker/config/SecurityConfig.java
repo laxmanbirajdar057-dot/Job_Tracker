@@ -35,9 +35,11 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:8080",   // ← your actual app origin
                 "http://localhost:3000",
                 "http://localhost:5173",
-                "http://localhost:4200"));
+                "http://localhost:4200"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
@@ -50,8 +52,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // ✅ FIXED: Use Spring's built-in Customizer.withDefaults() — NOT a custom
-                // method
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(management -> management
@@ -73,6 +73,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-    // ✅ REMOVED the broken private withDefaults() method entirely
 }
