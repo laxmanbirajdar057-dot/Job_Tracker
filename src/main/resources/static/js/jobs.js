@@ -88,7 +88,7 @@ function viewResume(resumeId) {
     showToast("You are not logged in.", "error");
     return;
   }
-  const url = `/api/resumes/${resumeId}/view?token=${encodeURIComponent(token)}`;
+  const url = `/resumes/${resumeId}/view?token=${encodeURIComponent(token)}`;
   window.open(url, "_blank");
 }
 
@@ -401,7 +401,7 @@ async function uploadResumeFile(jobId, file, label) {
     formData.append("file", file);
     formData.append("label", label || file.name);
     const token = Auth.getToken();
-    const res = await fetch("/api/resumes/upload", {
+    const res = await fetch("/resumes/upload", {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,

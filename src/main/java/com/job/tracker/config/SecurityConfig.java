@@ -61,11 +61,10 @@ public CorsConfigurationSource corsConfigurationSource() {
         "/auth/**",
         "/resumes/*/view",
         "/",
-        "/health",
         "/login-page",      // ← add back
         "/signup-page",     // ← add back
         "/dashboard",       // ← add back
-        "/api/js/**",           // ← static files
+        "/js/**",           // ← static files
         "/css/**",
         "/images/**"
     ).permitAll()
