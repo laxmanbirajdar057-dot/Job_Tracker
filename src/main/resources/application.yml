@@ -34,5 +34,5 @@ jwt:
 logging:
   level:
     root: INFO
-    com.jobtracker: DEBUG
+    com.job.tracker: DEBUG
     org.springframework.security: DEBUG
