@@ -60,18 +60,11 @@ public class SecurityConfig {
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authorizeHttpRequests(authz -> authz
                                                 .requestMatchers(
-                                                                "/auth/signup",
-                                                                "/auth/login",
                                                                 "/auth/**",
+                                                                "/resumes/*/view",
                                                                 "/",
-                                                                "/login-page",
-                                                                "/signup-page",
-                                                                "/dashboard",
-                                                                "/js/**",
-                                                                "/css/**",
-                                                                "/images/**",
-                                                                "/resumes/*/view"
-                                                ).permitAll()
+                                                                "/health")
+                                                .permitAll()
                                                 .anyRequest().authenticated())
                                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
