@@ -62,6 +62,7 @@ public class SecurityConfig {
                                                 .requestMatchers(
                                                                 "/auth/signup",
                                                                 "/auth/login",
+                                                                "/auth/**",
                                                                 "/",
                                                                 "/login-page",
                                                                 "/signup-page",
