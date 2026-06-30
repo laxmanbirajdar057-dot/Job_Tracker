@@ -39,7 +39,7 @@ public CorsConfigurationSource corsConfigurationSource() {
         "http://localhost:5173",
         "http://localhost:8080",
         "http://localhost:4200",
-        "https://smart-job-tracker-referral-management-system-production.up.railway.app/api/" 
+        "https://smart-job-tracker-referral-management-system-production.up.railway.app/api/login-page/" 
     ));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("*"));
