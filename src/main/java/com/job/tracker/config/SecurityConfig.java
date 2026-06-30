@@ -32,23 +32,25 @@ public class SecurityConfig {
         }
 
         @Bean
-public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList(
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://localhost:8080",
-        "http://localhost:4200"
-        // "https://smart-job-tracker-referral-management-system-production.up.railway.app/api/login-page/" 
-    ));
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(Arrays.asList("*"));
-    configuration.setAllowCredentials(true);
+        public CorsConfigurationSource corsConfigurationSource() {
+                CorsConfiguration configuration = new CorsConfiguration();
+                configuration.setAllowedOrigins(Arrays.asList(
+                                "http://localhost:3000",
+                                "http://localhost:5173",
+                                "http://localhost:8080",
+                                "http://localhost:4200",
+                                "https://smart-job-tracker-referral-management-system-production.up.railway.app"
 
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-}
+                ));
+                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+                configuration.setAllowedHeaders(Arrays.asList("*"));
+                configuration.setAllowCredentials(true);
+
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", configuration);
+                return source;
+        }
+
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http
@@ -57,18 +59,18 @@ public CorsConfigurationSource corsConfigurationSource() {
                                 .sessionManagement(management -> management
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authorizeHttpRequests(authz -> authz
-    .requestMatchers(
-        "/auth/**",
-        "/resumes/*/view",
-        "/",
-        "/login-page",      // ← add back
-        "/signup-page",     // ← add back
-        "/dashboard",       // ← add back
-        "/js/**",           // ← static files
-        "/css/**",
-        "/images/**"
-    ).permitAll()
-    .anyRequest().authenticated())
+                                                .requestMatchers(
+                                                                "/auth/**",
+                                                                "/resumes/*/view",
+                                                                "/",
+                                                                "/login-page", // ← add back
+                                                                "/signup-page", // ← add back
+                                                                "/dashboard", // ← add back
+                                                                "/js/**", // ← static files
+                                                                "/css/**",
+                                                                "/images/**")
+                                                .permitAll()
+                                                .anyRequest().authenticated())
                                 .formLogin(form -> form.disable()) // ← add this
                                 .httpBasic(basic -> basic.disable()) // ← add this
                                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
