@@ -18,7 +18,7 @@ import com.job.tracker.service.ReferralService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/referrals")
+@RequestMapping("/api/referrals")
 @CrossOrigin(origins = { "http://localhost:3000", "http://localhost:5173" })
 public class ReferralController {
 
@@ -84,7 +84,7 @@ public class ReferralController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/stats")
+    @GetMapping("/api/stats")
     public ResponseEntity<ReferralDTO.ReferralStats> getReferralStats(HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
         if (userId == null) {
