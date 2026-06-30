@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PageController {
 
-    // removed @GetMapping("/") — HomeController handles that
-
     @GetMapping("/login-page")
     public String loginPage() {
         return "login";
