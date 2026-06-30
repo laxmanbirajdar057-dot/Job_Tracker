@@ -57,13 +57,19 @@ public CorsConfigurationSource corsConfigurationSource() {
                                 .sessionManagement(management -> management
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authorizeHttpRequests(authz -> authz
-                                                .requestMatchers(
-                                                                "/auth/**",
-                                                                "/resumes/*/view",
-                                                                "/",
-                                                                "/health")
-                                                .permitAll()
-                                                .anyRequest().authenticated())
+    .requestMatchers(
+        "/auth/**",
+        "/resumes/*/view",
+        "/",
+        "/health",
+        "/login-page",      // ← add back
+        "/signup-page",     // ← add back
+        "/dashboard",       // ← add back
+        "/js/**",           // ← static files
+        "/css/**",
+        "/images/**"
+    ).permitAll()
+    .anyRequest().authenticated())
                                 .formLogin(form -> form.disable()) // ← add this
                                 .httpBasic(basic -> basic.disable()) // ← add this
                                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
