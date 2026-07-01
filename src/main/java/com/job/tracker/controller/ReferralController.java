@@ -18,7 +18,7 @@ import com.job.tracker.service.ReferralService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api/referrals")
+@RequestMapping("/referrals")
 @CrossOrigin(origins = { "http://localhost:3000", "http://localhost:5173" })
 public class ReferralController {
 

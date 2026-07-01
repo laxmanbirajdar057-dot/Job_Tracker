@@ -24,7 +24,7 @@ import com.job.tracker.service.ResumeService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api/resumes")
+@RequestMapping("/resumes")
 public class ResumeController {
 
     @Autowired

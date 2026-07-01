@@ -1,8 +1,6 @@
 package com.job.tracker.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,15 +10,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.job.tracker.dto.JobDTO;
 import com.job.tracker.service.JobService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 
 @RestController
-@RequestMapping("/api/jobs")
-@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:5173" })
+@RequestMapping("/jobs")
 public class JobController {
 
     private final JobService jobService;
