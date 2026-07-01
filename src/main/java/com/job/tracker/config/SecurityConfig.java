@@ -61,7 +61,7 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(authz -> authz
                                                 .requestMatchers(
                                                                 "/auth/**",
-                                                                "/resumes/*/view",
+                                                                "/api/resumes/*/view",
                                                                 "/",
                                                                 "error",
                                                                 "/login-page", // ← add back

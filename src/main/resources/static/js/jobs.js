@@ -57,7 +57,7 @@ async function loadDashboard() {
 
 async function loadStats() {
   try {
-    const count = await apiFetch("/jobs/stats/count");
+    const count = await apiFetch("/api/jobs/stats/count");
     document.getElementById("totalCount").textContent = count;
   } catch (err) {
     console.error("Failed to load job count", err);
@@ -68,7 +68,7 @@ async function loadJobs() {
   const container = document.getElementById("jobList");
   container.innerHTML = `<div class="empty-state">Loading your applications...</div>`;
   try {
-    const response = await apiFetch("/jobs");
+    const response = await apiFetch("/api/jobs");
     allJobs = response.data || [];
     renderStatusBreakdown(allJobs);
     applyFilter();
@@ -361,14 +361,14 @@ async function handleSaveJob(event) {
   try {
     let savedJob;
     if (editingJobId) {
-      savedJob = await apiFetch(`/jobs/${editingJobId}`, {
+      savedJob = await apiFetch(`/api/jobs/${editingJobId}`, {
         method: "PATCH",
         body: JSON.stringify(payload),
       });
       showToast("Job updated.");
     } else {
       payload.postedDate = new Date().toISOString().slice(0, 10);
-      savedJob = await apiFetch("/jobs", {
+      savedJob = await apiFetch("/api/jobs", {
         method: "POST",
         body: JSON.stringify(payload),
       });
@@ -401,7 +401,7 @@ async function uploadResumeFile(jobId, file, label) {
     formData.append("file", file);
     formData.append("label", label || file.name);
     const token = Auth.getToken();
-    const res = await fetch("/resumes/upload", {
+    const res = await fetch("/api/resumes/upload", {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
@@ -411,7 +411,7 @@ async function uploadResumeFile(jobId, file, label) {
     const uploadedResume = await res.json(); // ✅ get uploaded resume id
 
     // ✅ Link resume to job via PATCH
-    await apiFetch(`/jobs/${jobId}`, {
+    await apiFetch(`/api/jobs/${jobId}`, {
       method: "PATCH",
       body: JSON.stringify({ resumeId: uploadedResume.id }),
     });
@@ -430,7 +430,7 @@ async function uploadResumeFile(jobId, file, label) {
 async function handleDeleteJob(jobId) {
   if (!confirm("Delete this application? This can't be undone.")) return;
   try {
-    await apiFetch(`/jobs/${jobId}`, { method: "DELETE" });
+    await apiFetch(`/api/jobs/${jobId}`, { method: "DELETE" });
     showToast("Job deleted.");
     loadDashboard();
   } catch (err) {

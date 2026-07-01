@@ -66,7 +66,7 @@ function switchTab(tab) {
 
 async function loadReferrals() {
   try {
-    const response = await apiFetch("/referrals");
+    const response = await apiFetch("/api/referrals");
     allReferrals = response.data || [];
     renderReferralNetwork(allReferrals);
     renderReferralMiniList(allReferrals);
@@ -83,7 +83,7 @@ async function loadReferrals() {
 
 async function loadReferralStats() {
   try {
-    const stats = await apiFetch("/referrals/stats");
+    const stats = await apiFetch("/api/referrals/stats");
     document.getElementById("totalReferralsCount").textContent = stats.totalReferrals ?? 0;
     document.getElementById("totalViaReferralCount").textContent = stats.totalApplicationsViaReferral ?? 0;
     const rate = typeof stats.referralRatePercent === "number" ? stats.referralRatePercent : 0;
@@ -244,13 +244,13 @@ async function handleSaveReferral(event) {
 
   try {
     if (editingReferralId) {
-      await apiFetch(`/referrals/${editingReferralId}`, {
+      await apiFetch(`/api/referrals/${editingReferralId}`, {
         method: "PATCH",
         body: JSON.stringify(payload),
       });
       showToast("Referral contact updated.");
     } else {
-      await apiFetch("/referrals", {
+      await apiFetch("/api/referrals", {
         method: "POST",
         body: JSON.stringify(payload),
       });
@@ -271,7 +271,7 @@ async function handleSaveReferral(event) {
 async function handleDeleteReferral(referralId) {
   if (!confirm("Delete this referral contact? Jobs linked to them will be unlinked.")) return;
   try {
-    await apiFetch(`/referrals/${referralId}`, { method: "DELETE" });
+    await apiFetch(`/api/referrals/${referralId}`, { method: "DELETE" });
     showToast("Referral contact deleted.");
     await loadReferrals();
     await loadReferralStats();
